@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
+from django.core.cache import cache
 
 from ..models import Group, Post, Follow
 
@@ -171,6 +172,7 @@ class PaginatorViewsTest(TestCase):
                 author=cls.user,
                 group=cls.group
             )
+        cache.clear()
 
     def setUp(self):
         self.unauthorized_client = Client()
@@ -187,11 +189,14 @@ class PaginatorViewsTest(TestCase):
         ]
         for reverse_ in url_pages:
             with self.subTest(reverse_=reverse_):
-                self.assertEqual(len(self.unauthorized_client.get(
-                    reverse_).context.get('page_obj')),
+                self.assertEqual(
+                    len(self.unauthorized_client.get
+                        (reverse_).context.get('page_obj')),
                     posts_on_first_page
                 )
-                self.assertEqual(len(self.unauthorized_client.get(
-                    reverse_ + '?page=2').context.get('page_obj')),
+                self.assertEqual(
+                    len(self.unauthorized_client.get(reverse_ + '?page=2').
+                        context.get('page_obj')
+                        ),
                     posts_on_second_page
                 )

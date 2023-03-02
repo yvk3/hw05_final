@@ -1,5 +1,5 @@
 from http import HTTPStatus
-
+from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -41,6 +41,7 @@ class PostURLTests(TestCase):
             reverse('posts:profile', kwargs={'username': cls.author.username}),
             'posts/create_post.html': reverse('posts:create'),
         }
+        cache.clear()
 
     def setUp(self):
         self.guest_client = Client()
@@ -91,6 +92,7 @@ class PostURLTests(TestCase):
 
     def test_urls_use_correct_template(self):
         """При вводе URL-адреса открывается шаблон прописанный в urls."""
+        cache.clear()
         for template, reverse_name in self.templates_url_names.items():
             with self.subTest():
                 response = self.authorized_client.get(reverse_name)
