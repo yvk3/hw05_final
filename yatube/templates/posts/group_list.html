@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}
+  {{ group.title }}
+{% endblock %}
+{% block content %}
+  <div class="container py-5">
+    <p>Записи сообщества {{ group.title }}.</p>
+    <p>{{ group.description }}</p>
+    <h1>{% block header %}{{ group.title }}{% endblock header %}</h1>
+    {% for post in page_obj %}
+      {% include 'includes/post.html' with post=post %} 
+        <a href="{% url 'posts:post_detail' post.pk %}">(подробная информация)</a>
+      {% if not forloop.last %}<hr>{% endif %}
+    {% endfor %}
+  </div>
+  {% include 'posts/includes/paginator.html' %}
+{% endblock %} 
