@@ -27,7 +27,7 @@ def get_page_context(queryset, request):
 def index(request):
     template = 'posts/index.html'
     title = 'Последние обновления на сайте'
-    posts = Post.objects.all()
+    posts = Post.objects.all().select_related('author').all
     context = {
         'title': title,
         'posts': posts,
@@ -40,7 +40,7 @@ def group_posts(request, slug):
     template = 'posts/group_list.html'
     title = 'Запись сообщества'
     group = get_object_or_404(Group, slug=slug)
-    posts = Post.objects.all()
+    posts = Post.objects.all().select_related('slug').all
     context = {
         'group': group,
         'posts': posts,
@@ -53,15 +53,15 @@ def group_posts(request, slug):
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts = Post.objects.filter(author=author)
-    posts_count = posts.count()
     template = 'posts/profile.html'
+    followers = Follow.objects.filter(author__username=username).count()
     following = request.user.is_authenticated
     if following:
         following = author.following.filter(user=request.user).exists()
     context = {
         'author': author,
         'posts': posts,
-        'posts_count': posts_count,
+        'followers': followers,
         'following': following
     }
     context.update(get_page_context(author.posts.all(), request))

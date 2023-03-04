@@ -15,8 +15,7 @@ class PostPagesTests(TestCase):
         super().setUpClass()
         cls.user = User.objects.create_user('auth')
         cls.group = Group.objects.create(
-            title='Новая группа',
-            slug='test-slug',
+            slug='slug',
             description='Описание новой группы',
         )
         cls.post = Post.objects.create(
@@ -29,7 +28,7 @@ class PostPagesTests(TestCase):
             'posts/create_post.html': reverse('posts:create'),
             'posts/group_list.html': reverse(
                 'posts:group_list',
-                kwargs={'slug': 'test-slug'},
+                kwargs={'slug': 'slug'},
             )
         }
 
@@ -162,9 +161,7 @@ class PaginatorViewsTest(TestCase):
             username='auth',
         )
         cls.group = Group.objects.create(
-            title='Название новой группы',
-            slug='test_slug',
-            description='Описание новой группы',
+            slug='slug',
         )
         for i in range(13):
             Post.objects.create(

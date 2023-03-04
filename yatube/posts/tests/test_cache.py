@@ -9,7 +9,7 @@ class PostCreateFormTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.author = User.objects.create(username='user')
+        cls.author = User.objects.create()
 
     def setUp(self) -> None:
         super().setUp()

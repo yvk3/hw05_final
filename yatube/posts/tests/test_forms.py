@@ -13,12 +13,8 @@ class PostFormTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.post_author = User.objects.create_user(
-            'post_author',
-        )
-        cls.group = Group.objects.create(
-            title='Новая группа',
-        )
+        cls.post_author = User.objects.create_user(User)
+        cls.group = Group.objects.create()
 
     def setUp(self):
         self.guest_user = Client()
@@ -27,7 +23,6 @@ class PostFormTests(TestCase):
 
     def test_authorized_user_create_post(self):
         """Авторизированный пользователь создаёт пост."""
-        old_post_count = Post.objects.count()
         form_data = {
             'text': 'Текст нового поста',
             'group': self.group.id,
@@ -43,7 +38,7 @@ class PostFormTests(TestCase):
                 'posts:profile',
                 kwargs={'username': self.post_author.username})
         )
-        assert Post.objects.count() == old_post_count + 1
+        assert Post.objects.count() == 1
         post = Post.objects.latest('id')
         self.assertEqual(post.text, form_data['text'])
         self.assertEqual(post.author, self.post_author)
@@ -53,7 +48,6 @@ class PostFormTests(TestCase):
         """Авторизированный пользователь редактирует ранее созданный
         и сохранённый пост."""
         post = Post.objects.create(
-            text='Текст поста для редактирования',
             author=self.post_author,
         )
         form_data = {
@@ -77,7 +71,6 @@ class PostFormTests(TestCase):
 
     def test_nonauthorized_user_create_post(self):
         """Не авторизированный пользователь не может создать пост."""
-        posts_count = Post.objects.count()
         form_data = {
             'text': 'Поле для ввода текста поста',
         }
@@ -89,26 +82,24 @@ class PostFormTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         redirect = reverse('login') + '?next=' + reverse('posts:create')
         self.assertRedirects(response, redirect)
-        self.assertEqual(Post.objects.count(), posts_count)
+        self.assertEqual(Post.objects.count(), 0)
 
 
 class CommentFormTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.user = User.objects.create_user(username='author')
+        cls.user = User.objects.create_user(User)
         cls.group = Group.objects.create(
-            title='Новая группа',
             slug='slug',
         )
         cls.post = Post.objects.create(
             author=cls.user,
-            text='Текст gjcnf',
+            text='Текст поста',
             group=cls.group
         )
         cls.comment = Comment.objects.create(
             author=cls.user,
-            text='Текст комментария',
             post=cls.post
         )
 
