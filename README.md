@@ -1,3 +1,64 @@
-# hw05_final
+# Проект социальной сети.
+Социальная сеть. Позволяет создавать и редактировать собственные заметки, добавлять к заметкам фотографии. 
+В проекте реализована авторизация на Django, работа с Базами Данных.
 
-[![CI](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml/badge.svg?branch=master)](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml)
+## Технологии.
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
+- [Python 3.9](https://www.python.org/downloads/)
+- [Django 2.2.19](https://www.djangoproject.com/download/)
+
+## Установка проекта локально:
+***- Клонируйте репозиторий:***
+```
+git clone git@github.com:yvk3/foodgram-project-react.git
+```
+
+***- Установите и активируйте виртуальное окружение:***
+- для MacOS/Linux
+```
+python3 -m venv venv
+source env/bin/activate
+```
+- для Windows
+```
+python -m venv venv
+source venv/Scripts/activate
+```
+
+***- Установите зависимости из файла requirements.txt:***
+```
+python -m pip install --upgrade pip
+cd backend
+pip install -r requirements.txt
+```
+***- Примените миграции:***
+```
+python manage.py migrate
+```
+***- Запуск проекта:***
+```
+python manage.py runserver
+```
+
+## Распределение пользователей.
+- Зарегистрированные пользователи могут:
+    - просматривать, публиковать, удалять и редактировать свои публикации;
+    - просматривать, информацию о сообществах;
+    - просматривать, публиковать комментарии от своего имени к публикациям других пользователей (включая самого себя), удалять и редактировать свои комментарии;
+    - подписываться на других пользователей и просматривать свои подписки. Примечание: Доступ ко всем операциям записи, обновления и удаления доступны только после аутентификации и получения токена.
+- Не авторизованные пользователи могут:
+    - просматривать, публикации;
+    - просматривать, информацию о сообществах;
+    - росматривать, комментарии;
+
+### Доступные запросы API:
+- ```posts/``` - отображение постов и публикаций (GET, POST).
+- ```posts/{id}``` - Получение, изменение, удаление поста с соответствующим id (GET, PUT, PATCH, DELETE).
+- ```posts/{post_id}/comments/``` - Получение комментариев к посту с соответствующим post_id и публикация новых комментариев(GET, POST).
+- ```posts/{post_id}/comments/{id}``` - Получение, изменение, удаление комментария с соответствующим id к посту с соответствующим post_id (GET, PUT, PATCH, DELETE).
+- ```posts/groups/``` - Получение описания зарегестрированных сообществ (GET).
+- ```posts/groups/{id}/``` - Получение описания сообщества с соответствующим id (GET).
+- ```posts/follow/``` - Получение информации о подписках текущего пользователя, создание новой подписки на пользователя (GET, POST).
+
+## Автор
+Кузнецов Юрий [GitHub](https://github.com/yvk3)

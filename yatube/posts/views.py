@@ -32,7 +32,7 @@ def index(request):
         'title': title,
         'posts': posts,
     }
-    context = get_page_context(Post.objects.all(), request)
+    context.update(get_page_context(Post.objects.all(), request,))
     return render(request, template, context)
 
 
@@ -134,7 +134,7 @@ def add_comment(request, post_id):
 def follow_index(request):
     template = 'posts/follow.html'
     title = 'Подписки пользователя'
-    posts = Post.objects.filter(author__following__user=request.user)
+    posts = Post.objects.filter(author__following__user=request.user).select_related("author", "group")
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
